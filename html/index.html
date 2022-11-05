@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Plataforma de serviço web designer.">
+    <meta name="keywords" content="web, designer, criador, site">
+    <meta name="author" content="Luiz Felipe Carminatti">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/media.css">
+    <link rel="stylesheet" href="../../Programacao/fontawesome-free-6.2.0-web/css/all.css">
+    <title>Felipe Carminatti</title>
+</head>
+<body>
+    <main class="content"></main>
+    <button id="btn"><i class="fa-solid fa-angle-up"></i></button>
+    <header>
+        <div id="logo">
+            <a href="content.html">
+                <img src="../img/logo_transparent.png" alt="Logo marca" title="Logo marca">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href wm-link="content.html" wm-destino=".content">Ínicio</a></li>
+                <li><a href wm-link="works.html" wm-destino=".content">Templates</a></li>
+                <li><a href wm-link="contato.html" wm-destino=".content">Contato</a></li>
+                <li><a href wm-link="sobre.html" wm-destino=".content">Sobre</a></li>
+            </ul>
+        </nav>
+        <button id="menu"><i class="fa-solid fa-burger"></i></button>
+    </header>
+    <footer>
+        <div id="footerLogo">
+            <img src="../img/logo_transparent.png" alt="">
+        </div>
+        &copy; <span id="ano"></span> felipecarminatti.com.br | <a href="content.html">Ínicio</a>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+
+        let render = document.querySelector('.content')
+        fetch('content.html')
+            .then(res => res.text())
+            .then(html => {
+                render.innerHTML = html
+            })
+
+        function navegation(url, seletor, push = true) {
+            if (!url || !seletor) return
+            const elemento = document.querySelector(seletor)
+            fetch(url)
+                .then(res => res.text())
+                .then(html => {
+                    elemento.innerHTML = html
+                    if (push) {
+                        history.pushState({ seletor }, "hash", url)
+                    }
+                })
+        }
+
+        document.querySelectorAll('[wm-link]').forEach(link => {
+            let url = link.attributes['wm-link'].value
+            let seletorDestino = link.attributes['wm-destino'].value
+            link.onclick = e => {
+                e.preventDefault()
+                navegation(url, seletorDestino)
+            }
+        })
+
+        window.onpopstate = e => {
+            if (e.state) {
+                navegation(window.location.href, e.state.seletor, false)
+            }
+        }
+    </script>
+</body>
+</html>
